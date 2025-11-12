@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Questions</title>
+  <link rel="stylesheet" href="/static/questions_style.css" />
+
+  <script>
+    // Redirect to home on reload
+    if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+      window.location.href = "/";
+    }
+  </script>
+</head>
+
+<body>
+  <div class="head">
+    <img src="/static/logo.png" alt="img" width="100" />
+    <h1>Questions List</h1>
+  </div>
+
+  {% if questions %}
+    {% for q in questions %}
+      {# capture the outer loop/question index so inner loop can use it #}
+      {% set q_index = loop.index0 %}
+
+      <div class="question-card" data-qindex="{{ q_index }}">
+        <p><strong>{{ q.question }}</strong>
+          <span class="id">(Subject: {{ q.subject }} | {{ q.type }} | {{ q.level }})</span>
+        </p>
+
+        {% if q.options %}
+          <ul class="options">
+            {% for opt in q.options %}
+              <li>
+                <label>
+                  <!-- use the question index (q_index) so all options for this question share the same name -->
+                  <input
+                    type="radio"
+                    name="q{{ q_index }}"
+                    value="{{ opt }}"
+                    data-correct="{{ 'true' if opt == q.answer else 'false' }}"
+                  >
+                  {{ opt }}
+                </label>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <!-- True/False questions (also use q_index) -->
+          <ul class="options">
+            <li>
+              <label>
+                <input
+                  type="radio"
+                  name="q{{ q_index }}"
+                  value="True"
+                  data-correct="{{ 'true' if q.answer == 'True' else 'false' }}"
+                >
+                True
+              </label>
+            </li>
+            <li>
+              <label>
+                <input
+                  type="radio"
+                  name="q{{ q_index }}"
+                  value="False"
+                  data-correct="{{ 'true' if q.answer == 'False' else 'false' }}"
+                >
+                False
+              </label>
+            </li>
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No questions available.</p>
+  {% endif %}
+
+  <div id="score"></div>
+
+  <script>
+    // Retrieve stored CNIC
+    const userId = localStorage.getItem("cnic");
+    console.log("User ID:", userId);
+
+    const questionCards = document.querySelectorAll('.question-card');
+    const totalQuestions = questionCards.length;
+    let answeredCount = 0;
+    let score = 0;
+
+    questionCards.forEach((questionCard) => {
+      const options = questionCard.querySelectorAll('input[type="radio"]');
+      options.forEach((option) => {
+        option.addEventListener('change', () => {
+          // If this question not answered yet, mark and update counts
+          if (!questionCard.dataset.answered) {
+            questionCard.dataset.answered = 'true';
+            answeredCount++;
+            if (option.dataset.correct === 'true') {
+              score++;
+            }
+
+            // When all are answered, show score and send to backend
+            if (answeredCount === totalQuestions) {
+              const scoreDiv = document.getElementById('score');
+              scoreDiv.textContent = `Your Score: ${score} / ${totalQuestions}`;
+              console.log(`Final Score: ${score} out of ${totalQuestions}`);
+
+              fetch('/result', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  cnic: userId,
+                  result: score,
+                  total: totalQuestions
+                })
+              }).catch(err => console.error('Result submission error:', err));
+            }
+          } else {
+            // If user changes answer for the same question, adjust score accordingly:
+            // find previously selected radio (if any) and adjust score - simple approach:
+            // (optional) This block is not strictly necessary if you want first-answer-only.
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

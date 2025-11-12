@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SH Career - Welcome</title>
+  <link rel="stylesheet" href="/static/indexstyle.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>{{ greetings }}</h1>
+    <p>Your journey towards a successful career starts here!</p>
+
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name" placeholder="Enter your name" required>
+
+    <label for="number">Phone Number</label>
+    <input type="text" id="number" name="number" placeholder="e.g. 03001234567" pattern="^03[0-9]{9}$" maxlength="11"
+      required>
+    <small style="color: gray;">Format: 03XXXXXXXXX</small>
+
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+    <label for="cnic">CNIC</label>
+    <input type="text" id="cnic" placeholder="e.g. 12345-1234567-1" pattern="^[0-9]{5}-[0-9]{7}-[0-9]{1}$" required>
+
+    <small style="color: gray;">Format: 12345-1234567-1</small>
+
+    <p id="responseMsg" style="color: green; font-weight: bold;"></p>
+
+    <button id="startBtn" type="button" onclick="submitUser()">Start Questions</button>
+  </div>
+</body>
+<script src="/static/newscript.js" defer></script>
+
+</html>

@@ -1,0 +1,121 @@
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Background and layout */
+body {
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #222;
+}
+
+/* Container styling */
+.container {
+  background: #ffffff;
+  padding: 40px 50px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+}
+
+/* Headings */
+.container h1 {
+  color: #023e8a;
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.container p {
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 25px;
+}
+
+/* Labels */
+label {
+  display: block;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  margin: 10px 0 6px;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="email"],
+input[type="cnic"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="cnic"]:focus,
+input[type="number"]:focus {
+  border-color: #00b4d8;
+  box-shadow: 0 0 6px rgba(0, 180, 216, 0.4);
+  outline: none;
+}
+
+/* Response message */
+#responseMsg {
+  margin-top: 15px;
+  font-weight: 600;
+  color: green;
+  min-height: 20px;
+}
+
+/* Button styling */
+button {
+  width: 100%;
+  padding: 12px 0;
+  background-color: #0077b6;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+}
+
+button:hover {
+  background-color: #023e8a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 500px) {
+  .container {
+    padding: 30px 25px;
+  }
+
+  .container h1 {
+    font-size: 1.6em;
+  }
+
+  button {
+    font-size: 1rem;
+  }
+}
