@@ -27,10 +27,7 @@ def show_questions(request: Request):
 
     # Check for error
     if "error" in data:
-        return templates.TemplateResponse("error.html", {
-            "request": request,
-            "message": data["error"]
-        })
+        return {"error getting questions": data["error"]}
 
     # Render template with quiz data
     return templates.TemplateResponse("questions.html", {
