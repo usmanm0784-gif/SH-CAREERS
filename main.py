@@ -32,7 +32,7 @@ def show_questions(request: Request):
     # Render template with quiz data
     return templates.TemplateResponse("questions.html", {
         "request": request,
-        "questions": data["quiz"],           # ✅ updated key
+        "questions": data["quiz"],           #  updated key
         "total_questions": data["total_questions"]
     })
 

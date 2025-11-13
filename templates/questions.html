@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Questions</title>
+  <link rel="icon" type="image/png" href="/static/download.png">
   <link rel="stylesheet" href="/static/questions_style.css" />
 
   <script>
@@ -22,63 +23,51 @@
   </div>
 
   {% if questions %}
-    {% for q in questions %}
-      {# capture the outer loop/question index so inner loop can use it #}
-      {% set q_index = loop.index0 %}
+  {% for q in questions %}
+  {# capture the outer loop/question index so inner loop can use it #}
+  {% set q_index = loop.index0 %}
 
-      <div class="question-card" data-qindex="{{ q_index }}">
-        <p><strong>{{ q.question }}</strong>
-          <span class="id">(Subject: {{ q.subject }} | {{ q.type }} | {{ q.level }})</span>
-        </p>
+  <div class="question-card" data-qindex="{{ q_index }}">
+    <p><strong>{{ q.question }}</strong>
+      <span class="id">(Subject: {{ q.subject }} | {{ q.type }} | {{ q.level }})</span>
+    </p>
 
-        {% if q.options %}
-          <ul class="options">
-            {% for opt in q.options %}
-              <li>
-                <label>
-                  <!-- use the question index (q_index) so all options for this question share the same name -->
-                  <input
-                    type="radio"
-                    name="q{{ q_index }}"
-                    value="{{ opt }}"
-                    data-correct="{{ 'true' if opt == q.answer else 'false' }}"
-                  >
-                  {{ opt }}
-                </label>
-              </li>
-            {% endfor %}
-          </ul>
-        {% else %}
-          <!-- True/False questions (also use q_index) -->
-          <ul class="options">
-            <li>
-              <label>
-                <input
-                  type="radio"
-                  name="q{{ q_index }}"
-                  value="True"
-                  data-correct="{{ 'true' if q.answer == 'True' else 'false' }}"
-                >
-                True
-              </label>
-            </li>
-            <li>
-              <label>
-                <input
-                  type="radio"
-                  name="q{{ q_index }}"
-                  value="False"
-                  data-correct="{{ 'true' if q.answer == 'False' else 'false' }}"
-                >
-                False
-              </label>
-            </li>
-          </ul>
-        {% endif %}
-      </div>
-    {% endfor %}
+    {% if q.options %}
+    <ul class="options">
+      {% for opt in q.options %}
+      <li>
+        <label>
+          <!-- use the question index (q_index) so all options for this question share the same name -->
+          <input type="radio" name="q{{ q_index }}" value="{{ opt }}"
+            data-correct="{{ 'true' if opt == q.answer else 'false' }}">
+          {{ opt }}
+        </label>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <!-- True/False questions (also use q_index) -->
+    <ul class="options">
+      <li>
+        <label>
+          <input type="radio" name="q{{ q_index }}" value="True"
+            data-correct="{{ 'true' if q.answer == 'True' else 'false' }}">
+          True
+        </label>
+      </li>
+      <li>
+        <label>
+          <input type="radio" name="q{{ q_index }}" value="False"
+            data-correct="{{ 'true' if q.answer == 'False' else 'false' }}">
+          False
+        </label>
+      </li>
+    </ul>
+    {% endif %}
+  </div>
+  {% endfor %}
   {% else %}
-    <p>No questions available.</p>
+  <p>No questions available.</p>
   {% endif %}
 
   <div id="score"></div>
