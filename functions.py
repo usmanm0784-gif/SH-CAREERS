@@ -76,3 +76,28 @@ def add_user_result_to_db(result):
     else:
         return {"error": "User not found"}
 
+def get_users():
+    try:
+        # Fetch users and remove _id from every document
+        users = list(users_collection.find({}, {"_id": 0}))
+
+        return {
+            "status": "success",
+            "total_users": len(users),
+            "users": users
+        }
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
+# delete user by cnic
+def delete_user(cnic):
+    try:
+        result = users_collection.delete_one({"cnic": cnic})
+
+        if result.deleted_count == 1:
+            return {"status": "success", "message": "User deleted successfully"}
+        else:
+            return {"status": "error", "message": "User not found"}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}

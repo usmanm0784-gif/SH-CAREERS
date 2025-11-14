@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Users List</title>
+    <link rel="icon" type="image/png" href="/static/download.png">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0077b6, #00b4d8);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #023e8a;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 90%;
+            margin: auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th {
+            background: #2c3e50;
+            color: white;
+            padding: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+        tr:hover {
+            background: #f1f1f1;
+        }
+        .passed { color: green; font-weight: bold; }
+        .failed { color: red; font-weight: bold; }
+
+        .delete-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .delete-btn:hover {
+            background: #c1121f;
+        }
+        .heading {
+            text-align: center;
+            margin: 20px auto;
+            background-color: white;
+            width: fit-content;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="heading">
+    <h1>Users Report</h1>
+</div>
+
+
+<table>
+    <tr>
+        <th>Username</th>
+        <th>Number</th>
+        <th>Email</th>
+        <th>CNIC</th>
+        <th>Score</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    {% for u in users %}
+    <tr id="row-{{ u.cnic }}">
+        <td>{{ u.username }}</td>
+        <td>{{ u.number }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.cnic }}</td>
+        <td>{{ u.result }}</td>
+        <td>{{ u.total }}</td>
+
+        {% if u.result is not none and u.total is not none %}
+            {% set percentage = (u.result / u.total) * 100 %}
+            <td class="{{ 'passed' if percentage >= 50 else 'failed' }}">
+                {{ percentage|round(2) }}%
+            </td>
+        {% else %}
+            <td class="failed">N/A</td>
+        {% endif %}
+
+        <td>
+            <button class="delete-btn" onclick="deleteUser('{{ u.cnic }}')">Delete</button>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<script>
+function deleteUser(cnic) {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+
+    fetch(`/delete_user/${cnic}`, {
+        method: "DELETE"
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+
+        if (data.status === "success") {
+            document.getElementById("row-" + cnic).remove();
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+</script>
+
+</body>
+</html>
