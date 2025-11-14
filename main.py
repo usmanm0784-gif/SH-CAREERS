@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-import functions  # your MongoDB helper file
+import functions 
 from models import User, userresult, config
 
 app = FastAPI()
@@ -46,7 +46,8 @@ def show_questions(request: Request):
 #user route
 @app.post("/add_user")
 async def add_user_route(user: User):
-    return functions.add_user_to_db(user)
+    data = functions.add_user_to_db(user)
+    return data
 
 #amin can see users
 @app.get("/admin", response_class=HTMLResponse)
@@ -57,7 +58,7 @@ async def admin_page(request: Request):
         "users": data["users"]
     })
 
-
+#route to add user result
 @app.post("/result")
 async def add_user_result_route(result: userresult):
     return functions.add_user_result_to_db(result)

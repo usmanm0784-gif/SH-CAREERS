@@ -4,7 +4,7 @@ from bson import ObjectId
 from models import User
 from fastapi.responses import JSONResponse
 import random
-# Connect to MongoDB
+
 client = MongoClient("mongodb+srv://usman:Us%4026618@cluster0.okzi335.mongodb.net/")
 db = client["mydatabase"]
 collection = db["newquestions"]
@@ -54,7 +54,7 @@ def get_questions():
     except Exception as e:
         return {"error fetching questions": str(e)}
         
-    
+    # adding user to db
 def add_user_to_db(user: User):
     if users_collection.find_one({"cnic": user.cnic}):
         return JSONResponse(status_code=400, content={"message": "User already exists"})
@@ -62,6 +62,7 @@ def add_user_to_db(user: User):
     users_collection.insert_one(user.dict())
     return {"message": "User added successfully", "data": user.dict()}
 
+# add user result to db users db is updated
 def add_user_result_to_db(result):
     # Check if the user exists using their number
     user = users_collection.find_one({"cnic": result.cnic})
@@ -76,6 +77,7 @@ def add_user_result_to_db(result):
     else:
         return {"error": "User not found"}
 
+# for admin to see users
 def get_users():
     try:
         # Fetch users and remove _id from every document
@@ -89,6 +91,7 @@ def get_users():
 
     except Exception as e:
         return {"status": "error", "message": str(e)}
+    
 # delete user by cnic
 def delete_user(cnic):
     try:
